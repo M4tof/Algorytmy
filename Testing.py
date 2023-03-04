@@ -1,5 +1,4 @@
-tab=[1,2]
+tab=[1,2,3]
 
-tab[0],tab[1] = tab[1],tab[0]
-
-print(tab)
+for i in range(1,len(tab)):
+    print(tab[i])
