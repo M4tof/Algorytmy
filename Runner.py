@@ -14,6 +14,7 @@ startTime = time.time() #time at start
 #Sorting.selectionSort(tab)
 #Sorting.mergeSort(tab)
 #Sorting.quickSort(tab,0,(len(tab)-1))
+#Sorting.heapSort(tab)
 
 print(tab)
 
