@@ -1,3 +1,6 @@
+from time import sleep
+from threading import Timer
+
 def selectionSort(dane):
     n=len(dane)
     for j in range(0,n-1):
@@ -6,7 +9,6 @@ def selectionSort(dane):
             if dane[i] < dane[minimum]:
                 minimum = i
         dane[minimum],dane[j] = dane[j],dane[minimum]
-    return dane
 
 def insertSort(dane):
     n=len(dane)
@@ -17,7 +19,6 @@ def insertSort(dane):
             dane[i+1] = dane[i]
             i=i-1
         dane[i+1] = key
-    return dane
 
 def mergeSort(dane):
     n=len(dane)
@@ -50,3 +51,31 @@ def mergeSort(dane):
             dane[k] = right[j]
             j+=1
             k+=1
+
+#quick, 2 parts
+def Partiton(dane,p,r):
+    x = dane[r]
+    i=p-1
+    for j in range(p,r):
+        if dane[j] <= x:
+            i+=1
+            dane[i],dane[j]=dane[j],dane[i]
+    dane[i+1],dane[r] = dane[r],dane[i+1]
+    return i+1
+
+def quickSort(dane,p,r):
+    if p < r:
+        q = Partiton(dane,p,r)
+        quickSort(dane,p,q-1)
+        quickSort(dane,q+1,r)
+
+def sleepSort(dane):
+    sleepSort.result = []
+    def add1(x):
+        sleepSort.result.append(x)
+    mx = dane[0]
+    for v in dane:
+        if mx < v: mx = v
+        Timer(v, add1, [v]).start()
+    sleep(mx+1)
+    return sleepSort.result
