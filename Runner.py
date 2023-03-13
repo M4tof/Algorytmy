@@ -1,3 +1,6 @@
+# bez newline między tysiącami by było ładniej do excela
+# ------ między danymi
+
 import time
 import Sorting
 import RandNum
