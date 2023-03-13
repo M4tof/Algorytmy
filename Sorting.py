@@ -1,5 +1,5 @@
-from time import sleep
-from threading import Timer
+import sys
+sys.setrecursionlimit(200000000)
 
 def selectionSort(dane):
     n=len(dane)
@@ -52,35 +52,7 @@ def mergeSort(dane):
             j+=1
             k+=1
 
-#quick, 2 parts
-def Partiton(dane,p,r):
-    x = dane[r]
-    i=p-1
-    for j in range(p,r):
-        if dane[j] <= x:
-            i+=1
-            dane[i],dane[j]=dane[j],dane[i]
-    dane[i+1],dane[r] = dane[r],dane[i+1]
-    return i+1
-
-def quickSort(dane,p,r):
-    if p < r:
-        q = Partiton(dane,p,r)
-        quickSort(dane,p,q-1)
-        quickSort(dane,q+1,r)
-
-def sleepSort(dane):
-    sleepSort.result = []
-    def add1(x):
-        sleepSort.result.append(x)
-    mx = dane[0]
-    for v in dane:
-        if mx < v: mx = v
-        Timer(v, add1, [v]).start()
-    sleep(mx+1)
-    return sleepSort.result
-
-def heapLite(dane,n,i):
+def heapify(dane,n,i):
     largest = i
     l = 2 * i + 1
     r = 2 * i + 2
@@ -93,12 +65,30 @@ def heapLite(dane,n,i):
 
     if largest != i:
         dane[i], dane[largest] = dane[largest], dane[i]
-        heapLite(dane,n,largest)
+        heapify(dane,n,largest)
 
 def heapSort(dane):
     n = len(dane)
     for i in range(n//2,-1,-1):
-        heapLite(dane,n,i)
+        heapify(dane,n,i)
     for i in range(n-1,0,-1):
         dane[i],dane[0]=dane[0],dane[i]
-        heapLite(dane,i,0)
+        heapify(dane,i,0)
+
+
+def quickSort(array):
+    less = []
+    equal = []
+    greater = []
+    if len(array) > 1:
+        pivot = array[0]
+        for x in array:
+            if x < pivot:
+                less.append(x)
+            elif x == pivot:
+                equal.append(x)
+            elif x > pivot:
+                greater.append(x)
+        return quickSort(less)+equal+quickSort(greater)
+    else:
+        return array

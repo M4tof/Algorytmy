@@ -1,16 +1,12 @@
 import random
 
-def RandGen():
-    N=int(input("Length of random number list: "))
-    L=int(input("Min value: "))
-    H=int(input("Max value: "))
-
+def RandGen(N,L,H):
     list=[]
     for i in range(N):
         list.append(random.randint(L,H))
 
     return(list)
 
-#tab=RandGen()
+#tab=RandGen(100,1,100)
 
 #print(tab)
