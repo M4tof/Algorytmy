@@ -21,11 +21,11 @@ Random = Numbers.Rand
 
 for g in range(6):
     print(cat3[g])
-    f.write(cat3[g]+"\n")
+    f.write(cat3[g]+":1:2:3:4:5:6:7:8:9:10:11:12:13:14:15\n")
 
     for j in range(4):
         print('Sorting:',cat2[j])
-        f.write('Sorting:'+str(cat2[j])+"\n")
+        f.write(str(cat2[j])+":")
 
         run=1
         for i in range(1,16):
@@ -47,19 +47,20 @@ for g in range(6):
             if g==5:
                 tab=Numbers.ShapeV(1000*i)
             
-            startTime = time.time_ns() #time at start
+            startTime = time.time() #time at start
 
             cat[j](tab)
             
-            endTime= time.time_ns()    #time at end #NANO MACHINES SON !
+            endTime= time.time()    #time at end #NANO MACHINES SON !
             totalTime= endTime - startTime  #run time
             
             print(run,'Total run time in nanoseconds =',(totalTime))    #display run time
             
-            f.write(str(run)+":"+"Total run time in nanoseconds ="+str(totalTime)+"\n")
+            f.write(str(totalTime)+":")
             
             run+=1
             del(tab)
+        f.write("\n")
             
     print("\n")
     f.write("\n")
