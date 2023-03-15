@@ -30,5 +30,3 @@ def ShapeA(L):
         t.append(i)
     t=t+t[::-1]
     return t
-
-print(ShapeV(20))

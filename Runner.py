@@ -1,6 +1,3 @@
-# bez newline między tysiącami by było ładniej do excela
-# ------ między danymi
-
 import time
 import Sorting
 import RandNum
@@ -12,14 +9,14 @@ f = open("wyniki.txt","w")
 
 cat=[lambda x: Sorting.insertSort(x), lambda x: Sorting.selectionSort(x),lambda x: Sorting.mergeSort(x),lambda x: Sorting.heapSort(x)]
 cat2=["insert","selection","merge","heap"]
-cat3=["Ones","Ascending","Descending","Random","A_Shape","V_Shape"]
+cat3=["Ones","Ascending","Descending","Random","V_Shape"]
 
 Ones=Numbers.Ones
 Ascending = Numbers.Ass
 Descending = Numbers.Des
 Random = Numbers.Rand
 
-for g in range(6):
+for g in range(5):
     print(cat3[g])
     f.write(cat3[g]+":1:2:3:4:5:6:7:8:9:10:11:12:13:14:15\n")
 
@@ -43,8 +40,6 @@ for g in range(6):
                 Le=(1000*i)
                 tab=Random[1:Le]
             if g==4:
-                tab=Numbers.ShapeA(1000*i)
-            if g==5:
                 tab=Numbers.ShapeV(1000*i)
             
             startTime = time.time() #time at start
