@@ -5,7 +5,7 @@ import sys
 import Numbers
 sys.setrecursionlimit(2000000)
 
-f = open("wyniki.txt","w")
+f = open("wyniki.txt","a")
 
 cat=[lambda x: Sorting.insertSort(x), lambda x: Sorting.selectionSort(x),lambda x: Sorting.mergeSort(x),lambda x: Sorting.heapSort(x)]
 cat2=["insert","selection","merge","heap"]
@@ -49,7 +49,7 @@ for g in range(5):
             endTime= time.time()    #time at end #NANO MACHINES SON !
             totalTime= endTime - startTime  #run time
             
-            print(run,'Total run time in nanoseconds =',(totalTime))    #display run time
+            print(run,'Total run time in miliseconds =',(totalTime*1000))    #display run time
             
             f.write(str(totalTime)+":")
             

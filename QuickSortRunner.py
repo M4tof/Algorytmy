@@ -4,6 +4,7 @@ import Sorting
 import RandNum
 import sys
 import Numbers
+from statistics import median
 sys.setrecursionlimit(2000000)
 
 def quickSortRight(array):
@@ -28,7 +29,7 @@ def quickSortMid(array):
     equal = []
     greater = []
     if len(array) > 1:
-        pivot = array[len(array)//2]
+        pivot = array[len(array)//2]#MEDIANA
         for x in array:
             if x < pivot:
                 less.append(x)
