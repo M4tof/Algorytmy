@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <windows.h>    
 
 typedef struct Node {
     int key;
     struct Node *next;
 }node;
+
+bool Empty = true;
 
 void InsertHead(node ** head, int A){ // InsertHead(&listname,value)
     node * new_node = NULL;
@@ -90,7 +94,7 @@ void DeleteSpecific(node **head, int index) { // DeleteSpecific(&listname, index
     free(current);
 }
 
-void DeleteList(node **head) {
+void DeleteList(node **head) { //DeleteList(&listname);
     node *current = *head;
     
     while (current != NULL) {
@@ -101,18 +105,85 @@ void DeleteList(node **head) {
     *head = NULL;
 }
 
+int Lowest(node * head){ //Lowest(listname);
+    node * current = head;
+    return (current->key);
+}
+
+void Add(node *head,node **head2,int A){ //Add(listname,&listname,value);
+    if (Empty==true){
+        new(head,A);
+        Empty=false;
+    }
+    else{
+        if (A < Lowest(head)){
+        InsertHead(head2,A);
+        }
+        if (A > Lowest(head)){
+        InsertNext(head,A);
+        }
+        else{
+        
+        }
+    }
+}
+
+void Add2(node *head,node **head2,int A){ //Add(listname,&listname,value);
+    if (Empty==true){
+        new(head,A);
+        Empty=false;
+    }
+    else{
+        if (A < Lowest(head)){
+        InsertHead(head2,A);
+        }
+        if (A > Lowest(head)){
+        InsertNext(head,A);
+        }
+        else{
+        
+        }
+    }
+}
+
+
+//tab=[1,3,5,7,9,2,4,6,0,8]
 int main(){
+
+    LARGE_INTEGER frequency;        // ticks per second
+    LARGE_INTEGER t1, t2;           // ticks
+    double elapsedTime;
+    // get ticks per second
+    QueryPerformanceFrequency(&frequency);
+    // start timer
+    QueryPerformanceCounter(&t1);
+    
     node * test_list = NULL;
     test_list = (node *) malloc(sizeof(node)); //Create and Name
-
-    new(test_list,2);
-    InsertHead(&test_list,1);
-    InsertNext(test_list,3);
+    
+    Add(test_list,&test_list,1);
+    Add(test_list,&test_list,3);
+    Add(test_list,&test_list,5);
+    Add(test_list,&test_list,7);
+    Add(test_list,&test_list,9);
+    Add(test_list,&test_list,2);
+    Add(test_list,&test_list,4);
+    Add(test_list,&test_list,6);
+    Add(test_list,&test_list,0);
+    Add(test_list,&test_list,8);
     print_list(test_list);
-    DeleteSpecific(&test_list,2);
+
+    QueryPerformanceCounter(&t2);
+    elapsedTime = (t2.QuadPart - t1.QuadPart) * 1000.0 / frequency.QuadPart;
+    printf("%f ms.\n", elapsedTime);
+    
+
+    DeleteHead(&test_list);
+    DeleteLast(test_list);
+    DeleteSpecific(&test_list,1);
     print_list(test_list);
     DeleteList(&test_list);
-    print_list(test_list);
-        return 0;
+        
+    return 0;
 
 }
