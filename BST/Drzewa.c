@@ -22,16 +22,18 @@ struct tree *insert(struct tree *root, int x){
 	}
 	return(root);
 
-struct tree *search(struct tree *root, int x); { //Zobacz czy działa
-	struct tree *ptr;
-	ptr=root;
-	while(ptr) {
-		if(x>ptr->info)
-		     ptr=ptr->right; else if(x<ptr->info)
-		     ptr=ptr->left; else
-		     break;
-	    }
+struct tree *search(struct tree *root, int x){
+    struct tree *ptr;
+    ptr = root;
+    while(ptr) {
+        if(x > ptr->info)
+            ptr = ptr->right; 
+        else if(x < ptr->info)
+            ptr = ptr->left; 
+        else
+            return ptr; // return the pointer to the found node
     }
+    return NULL; // return NULL if the node is not found
 }
 
 void inorder(struct tree *root){

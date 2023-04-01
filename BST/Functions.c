@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <windows.h>    
+#include <time.h>
 
 typedef struct Node {
     int key;
@@ -39,7 +39,7 @@ void print_list(node * head) { // print_list(listname)
     printf("\n");
 }
 
-void new(node * head, int A){ // node * listname =NULL; listname = (node *) malloc(sizeof(node)); new(listname,value);
+void newlist(node * head, int A){ // node * listname =NULL; listname = (node *) malloc(sizeof(node)); newlist(listname,value);
     node * current = head;
     current->key = A;
     current->next = NULL;
@@ -113,7 +113,7 @@ int Lowest(node * head){ //Lowest(listname);
 
 void Add(node *head,node **head2,int A){ //Add(listname,&listname,value);
     if (Empty==true){
-        new(head,A);
+        newlist(head,A);
         Empty=false;
     }
     else{
@@ -129,30 +129,103 @@ void Add(node *head,node **head2,int A){ //Add(listname,&listname,value);
     }
 }
 
+////////////////////////////////////////BST///////////////////////////////////////////////////
 
-int main(){
-    node * test_list = NULL;
-    test_list = (node *) malloc(sizeof(node)); //Create and Name
-    
-    Add(test_list,&test_list,1);
-    Add(test_list,&test_list,3);
-    Add(test_list,&test_list,5);
-    Add(test_list,&test_list,7);
-    Add(test_list,&test_list,9);
-    Add(test_list,&test_list,2);
-    Add(test_list,&test_list,4);
-    Add(test_list,&test_list,6);
-    Add(test_list,&test_list,0);
-    Add(test_list,&test_list,8);
-    print_list(test_list);
-    
+struct tree {
+	int info;
+	struct tree *left;
+	struct tree *right;
+};
 
-    DeleteHead(&test_list);
-    DeleteLast(test_list);
-    DeleteSpecific(&test_list,1);
-    print_list(test_list);
-    DeleteList(&test_list);
-        
-    return 0;
+struct tree *insert(struct tree *root, int x){
+	if(!root) {
+		root=(struct tree*)malloc(sizeof(struct tree));
+		root->info = x;
+		root->left = NULL;
+		root->right = NULL;
+		return(root);
+	}
+	if(root->info > x)
+	     root->left = insert(root->left,x); else {
+		if(root->info < x)
+			root->right = insert(root->right,x);
+	}
+	return(root);
+}
 
+struct tree *search(struct tree *root, int x){
+    struct tree *ptr;
+    ptr = root;
+    while(ptr) {
+        if(x > ptr->info)
+            ptr = ptr->right; 
+        else if(x < ptr->info)
+            ptr = ptr->left; 
+        else
+            return ptr; // return the pointer to the found node
+    }
+    return NULL; // return NULL if the node is not found
+}
+
+void inorder(struct tree *root){
+	if(root != NULL) {
+		inorder(root->left);
+		printf(" %d",root->info);
+		inorder(root->right);
+	}
+	return;
+}
+
+void postorder(struct tree *root){
+	if(root != NULL) {
+		postorder(root->left);
+		postorder(root->right);
+		printf(" %d",root->info);
+	}
+	return;
+}
+
+void preorder(struct tree *root){
+	if(root != NULL) {
+		printf(" %d",root->info);
+		preorder(root->left);
+		preorder(root->right);
+	}
+	return;
+}
+
+void DeleteTree(struct tree *root){
+    if (root != NULL){
+        DeleteTree(root->left);
+        DeleteTree(root->right);
+        free(root);
+    }
+
+}
+///////////////////////////////////////////////////////////////
+int* generate_random_array(int length) {
+    int* array = malloc(length * sizeof(int));
+
+    // initialize the array with unique random integers
+    srand(time(NULL));
+    for (int i = 0; i < length; i++) {
+        int rand_int;
+        do {
+            rand_int = rand();
+            // check if rand_int already exists in the array
+            int exists = 0;
+            for (int j = 0; j < i; j++) {
+                if (array[j] == rand_int) {
+                    exists = 1;
+                    break;
+                }
+            }
+            if (!exists) {
+                array[i] = rand_int;
+                break;
+            }
+        } while (1);
+    }
+
+    return array;
 }
