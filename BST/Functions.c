@@ -214,6 +214,55 @@ void DeleteTree(struct tree *root){
     }
 
 }
+
+int height(struct tree *root) {
+    if (root == NULL) {
+        return -1; // height of an empty tree is -1
+    } else {
+        int left_height = height(root->left);
+        int right_height = height(root->right);
+        return 1 + (left_height > right_height ? left_height : right_height);
+    }
+}
+
+int count_nodes(struct tree* node) {
+    if (node == NULL)
+        return 0;
+    return 1 + count_nodes(node->left) + count_nodes(node->right);
+}
+
+struct tree* sorted_array_to_avl(int arr[], int start, int end) {
+    if (start > end)
+        return NULL;
+
+    int mid = (start + end) / 2;
+    struct tree* root = (struct tree*)malloc(sizeof(struct tree));
+    root->info = arr[mid];
+    root->left = sorted_array_to_avl(arr, start, mid - 1);
+    root->right = sorted_array_to_avl(arr, mid + 1, end);
+    return root;
+}
+
+void inorder_to_array(struct tree* node, int arr[], int* i) {
+    if (node == NULL){
+        return;
+    }
+    inorder_to_array(node->left, arr, i);
+    arr[(*i)++] = node->info;
+    inorder_to_array(node->right, arr, i);
+}
+
+struct tree* bst_to_avl(struct tree* root) {
+    int n = count_nodes(root);
+    int* arr = (int*)malloc(n * sizeof(int));
+    int i = 0;
+    inorder_to_array(root, arr, &i);
+    struct tree* new_root = sorted_array_to_avl(arr, 0, n - 1);
+    free(arr);
+    return new_root;
+}
+
+
 ///////////////////////////////////////////////////////////////
 int* generate_random_array(int length) {
     int* array = malloc(length * sizeof(int));
