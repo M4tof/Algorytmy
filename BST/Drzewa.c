@@ -21,6 +21,7 @@ struct tree *insert(struct tree *root, int x){
 			root->right = insert(root->right,x);
 	}
 	return(root);
+}
 
 struct tree *search(struct tree *root, int x){
     struct tree *ptr;
@@ -81,10 +82,10 @@ int main(){
 	
     inorder(root);
     printf("pre\n");
-    DeleteTree(root);
+
+	search(root,10);
+
     printf("done\n");
-    inorder(root);
-    printf("END\n");
     
     return 0;
 }

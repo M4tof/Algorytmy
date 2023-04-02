@@ -129,6 +129,18 @@ void Add(node *head,node **head2,int A){ //Add(listname,&listname,value);
     }
 }
 
+int Serch(node * head,int A) { // 
+    node * current = head;
+    int Count=0;
+    while (current != NULL) {
+        if (current->key == A){
+            return Count;
+        }
+        Count++;
+        current = current->next;
+    }
+}
+
 ////////////////////////////////////////BST///////////////////////////////////////////////////
 
 struct tree {
