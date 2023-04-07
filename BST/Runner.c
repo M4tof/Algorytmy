@@ -6,9 +6,9 @@
 
 int main(){
     
-    FILE* file = fopen("Wyniki.txt", "w");
+    FILE* file = fopen("Wyniki.txt", "a");
     
-    for(int Big=1;Big<=20;Big++){
+    for(int Big=1;Big<=30;Big++){
 
         double NBig = 1000*Big;
 
@@ -118,19 +118,13 @@ int main(){
         QueryPerformanceCounter(&t1);
         
         for(int i=0;i<NBig;++i){
-                serch(root,array[i]);
+                search(root,array[i]);
         }
+        QueryPerformanceCounter(&t2);
+        elapsedTime = (t2.QuadPart - t1.QuadPart) * 1000.0 / frequency.QuadPart; //timer end
+        fprintf(file, "%f\n", elapsedTime);
 
-
-
-
-
-
-        
-
-
-
-        /////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////
 
         //////////////////////Tree Deletion////////////////////////
         fprintf(file,"Tree Deletion time on run nr : ");
