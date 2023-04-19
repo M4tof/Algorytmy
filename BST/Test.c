@@ -47,7 +47,6 @@ void submain(int LArray,int AArray[]){
 }
 
 
-
 int main() {
     FILE* file = fopen("Liczby.txt", "r");
     if (!file) {
@@ -57,26 +56,28 @@ int main() {
 
     char line[MAX_LINE_LENGTH];
     int numbers[MAX_NUMBERS_PER_LINE];
-    int num_numbers;
 
     while (fgets(line, MAX_LINE_LENGTH, file)) {
-        num_numbers = 0;
 
+        char* Glowny;
+        char* Sub;
+        
+        printf("NORMAL %s\n",line);
 
-        char* token = strtok(line, " \n");
-        while (token) {
-            numbers[num_numbers++] = atoi(token);
-            token = strtok(NULL, " \n");
+        char* token = strtok_r(line,"-",&Glowny);
+        while (token!=NULL) {
+            printf("Tokenised %s \n",token);
+            char* innertoken = strtok_r(token,",",&Sub);
+                while (innertoken!=NULL){
+                    printf("InnerTokenised %s \n",innertoken);
+
+                    innertoken = strtok_r(NULL,",",&Sub);
+            }
+            token = strtok_r(NULL, "-",&Glowny);
         }
         
-        for (int i = 0; i < num_numbers; i++) {
-            printf("%d ", numbers[i]);
-        }
         printf("\n");
-
-        // TODO: Process the array as needed
-        submain(num_numbers,numbers);
-    }
+}
 
     fclose(file);
     return 0;
