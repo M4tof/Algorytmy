@@ -36,7 +36,6 @@ void print_list(node * head) { // print_list(listname)
         printf("%d\n", current->key);
         current = current->next;
     }
-    printf("\n");
 }
 
 void newlist(node * head, int A){ // node * listname =NULL; listname = (node *) malloc(sizeof(node)); newlist(listname,value);
@@ -129,7 +128,7 @@ void Add(node *head,node **head2,int A){ //Add(listname,&listname,value);
     }
 }
 
-int Serch(node * head,int A) { // 
+int Serch(node * head,int A) { //Serch(listname,chosenNumber);
     node * current = head;
     int Count=0;
     while (current != NULL) {
@@ -184,6 +183,15 @@ void inorder(struct tree *root){
 		inorder(root->left);
 		printf(" %d",root->info);
 		inorder(root->right);
+	}
+	return;
+}
+
+void Dummyinorder(FILE* file,struct tree *root){
+	if(root != NULL) {
+		Dummyinorder(file,root->left);
+		//fprintf(file," %d",root->info);
+		Dummyinorder(file,root->right);
 	}
 	return;
 }
@@ -263,7 +271,7 @@ struct tree* bst_to_avl(struct tree* root) {
 }
 
 
-///////////////////////////////////////////////////////////////
+///////////////////////////MISC/////////////////////
 int* generate_random_array(int length) {
     int* array = malloc(length * sizeof(int));
 
@@ -289,4 +297,87 @@ int* generate_random_array(int length) {
     }
 
     return array;
+}
+
+int partition(int array[], int left, int right) {
+    int pivot_index = rand() % (right - left + 1) + left;
+    int pivot_value = array[pivot_index];
+
+    int temp = array[pivot_index];
+    array[pivot_index] = array[right];
+    array[right] = temp;
+
+    int i = left - 1;
+    for (int j = left; j < right; j++) {
+        if (array[j] <= pivot_value) {
+            i++;
+            
+            temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+    }
+    
+    temp = array[i + 1];
+    array[i + 1] = array[right];
+    array[right] = temp;
+
+    return i + 1;
+}
+
+void quickSort(int array[], int left, int right) {
+    if (left < right) {
+        int pivot_index = partition(array, left, right);
+        
+        quickSort(array, left, pivot_index - 1);
+        quickSort(array, pivot_index + 1, right);
+    }
+}
+
+void heapify(int dane[], int n, int i) {
+    int largest = i;
+    int l = 2 * i + 1;
+    int r = 2 * i + 2;
+
+    if (l < n && dane[i] < dane[l]) {
+        largest = l;
+    }
+    
+    if (r < n && dane[largest] < dane[r]) {
+        largest = r;
+    }
+
+    if (largest != i) {
+        int temp = dane[i];
+        dane[i] = dane[largest];
+        dane[largest] = temp;
+        heapify(dane, n, largest);
+    }
+}
+
+void heapSort(int dane[], int n) {
+    for (int i = n/2 - 1; i >= 0; i--) {
+        heapify(dane, n, i);
+    }
+
+    for (int i = n - 1; i > 0; i--) {
+        int temp = dane[i];
+        dane[i] = dane[0];
+        dane[0] = temp;
+        heapify(dane, i, 0);
+    }
+}
+
+void selectionSort(int dane[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        int min_idx = i;
+        for (int j = i + 1; j < n; j++) {
+            if (dane[j] < dane[min_idx]) {
+                min_idx = j;
+            }
+        }
+        int temp = dane[i];
+        dane[i] = dane[min_idx];
+        dane[min_idx] = temp;
+    }
 }
