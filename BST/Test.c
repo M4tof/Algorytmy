@@ -1,84 +1,59 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <stdbool.h>
 #include <windows.h>
 #include "Functions.c" 
 
-#define MAX_LINE_LENGTH 1000
-#define MAX_NUMBERS_PER_LINE 100
-
-void submain(int LArray,int AArray[]){
-    printf("-----------\n");
-
-    node * lista = NULL;
-    lista = (node *) malloc(sizeof(node));
-
-    for(int i=0; i<LArray; i++){
-        Add(lista,&lista,AArray[i]);
-    }
-
-    print_list(lista);
-    printf("_\n");
-
-    for(int i=0;i<LArray;++i){
-        printf("%d\n",Serch(lista,AArray[i]));
-    }
-
-    DeleteList(&lista);
-
-    printf("_\n");
-    struct tree *root = NULL; // initialize root to NULL
-            
-    for(int i=0; i<LArray; i++){
-        root = insert(root, AArray[i]);
-    }
-
-    for(int i=0;i<LArray;++i){
-            search(root,AArray[i]);
-    }
-
-    inorder(root);
-
+int main(){
     
-    DeleteTree(root);
+    FILE* file = fopen("Wyniki.txt", "a");
+    
+    for(int Big=1;Big<=1;Big++){
 
-    printf("\n-----------\n");
-}
+        double NBig = 7*Big;
 
+        int array[7] = {1,2,4,3,5,10,9}; //List of randome numbers
+    
+        LARGE_INTEGER frequency;        // ticks per second
+        LARGE_INTEGER t1, t2;           // ticks
+        double elapsedTime;
+        // get ticks per second
+        QueryPerformanceFrequency(&frequency);
 
-int main() {
-    FILE* file = fopen("Liczby.txt", "r");
-    if (!file) {
-        printf("Failed to open file\n");
-        return 1;
-    }
-
-    char line[MAX_LINE_LENGTH];
-    int numbers[MAX_NUMBERS_PER_LINE];
-
-    while (fgets(line, MAX_LINE_LENGTH, file)) {
-
-        char* Glowny;
-        char* Sub;
+        //Dla tablicy
         
-        printf("NORMAL %s\n",line);
+        printf("Run nr: ");
+        printf("%d\n",Big);
 
-        char* token = strtok_r(line,"-",&Glowny);
-        while (token!=NULL) {
-            printf("Tokenised %s \n",token);
-            char* innertoken = strtok_r(token,",",&Sub);
-                while (innertoken!=NULL){
-                    printf("InnerTokenised %s \n",innertoken);
+/////////////////////////////////////////////////////////////////////////////////////////
+                //List //Tree //Line //
+/////////////////////////////////////////////////////////////////////////////////////////
 
-                    innertoken = strtok_r(NULL,",",&Sub);
-            }
-            token = strtok_r(NULL, "-",&Glowny);
+        /////////////////Tree Creation///////////////////////
+        struct tree *root = NULL; // initialize root to NULL
+            
+        for(int i=1; i<=NBig; i++){
+            root = insert(root, array[i]);
         }
-        
-        printf("\n");
-}
+        /////////////////////////////////////////////////////////////
 
-    fclose(file);
-    return 0;
+        ////////////Tree Serch//////////////////////////////////////
+
+        for(int i=0;i<NBig;++i){
+                printf("%d ==> ",array[i]);
+                printf("%d\n",search(root,array[i]));
+        }
+
+        //////////////////////////////////////////////////////////////
+
+        //////////////////////Tree Deletion////////////////////////
+
+        DeleteTree(root);
+
+        /////////////////////////////////////////////////////////////
+
+        }
+        fclose(file);
+        return 0;
+
 }

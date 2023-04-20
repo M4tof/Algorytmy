@@ -164,21 +164,26 @@ struct tree *insert(struct tree *root, int x){
 	return(root);
 }
 
-struct tree *search(struct tree *root, int x){
+int search(struct tree *root, int x){
     struct tree *ptr;
+    int height=0;
+    char poz[20]={};
     ptr = root;
     while(ptr) {
-        if(x > ptr->info)
-            ptr = ptr->right; 
-        else if(x < ptr->info)
-            ptr = ptr->left; 
-        else
-            return ptr; // return the pointer to the found node
+        height++;
+        if(x > ptr->info){
+            ptr = ptr->right;
+            poz[height-1]='R';}
+        else if(x < ptr->info){
+            ptr = ptr->left;
+            poz[height-1]='L';} 
+        else{
+            return height;}
     }
-    return NULL; // return NULL if the node is not found
+    return 0; // return NULL if the node is not found
 }
 
-void inorder(struct tree *root){
+void inorder(struct tree *root){// inorder(root)
 	if(root != NULL) {
 		inorder(root->left);
 		printf(" %d",root->info);
@@ -187,7 +192,7 @@ void inorder(struct tree *root){
 	return;
 }
 
-void Dummyinorder(FILE* file,struct tree *root){
+void Dummyinorder(FILE* file,struct tree *root){// Dummyinorder(root)
 	if(root != NULL) {
 		Dummyinorder(file,root->left);
 		//fprintf(file," %d",root->info);
@@ -196,7 +201,7 @@ void Dummyinorder(FILE* file,struct tree *root){
 	return;
 }
 
-void postorder(struct tree *root){
+void postorder(struct tree *root){// postorder(root)
 	if(root != NULL) {
 		postorder(root->left);
 		postorder(root->right);
@@ -205,7 +210,7 @@ void postorder(struct tree *root){
 	return;
 }
 
-void preorder(struct tree *root){
+void preorder(struct tree *root){// preorder(root)
 	if(root != NULL) {
 		printf(" %d",root->info);
 		preorder(root->left);
@@ -214,7 +219,7 @@ void preorder(struct tree *root){
 	return;
 }
 
-void DeleteTree(struct tree *root){
+void DeleteTree(struct tree *root){// DeleteTree(root)
     if (root != NULL){
         DeleteTree(root->left);
         DeleteTree(root->right);
@@ -223,7 +228,7 @@ void DeleteTree(struct tree *root){
 
 }
 
-int height(struct tree *root) {
+int height(struct tree *root) {// height(root)
     if (root == NULL) {
         return -1; // height of an empty tree is -1
     } else {
@@ -260,7 +265,7 @@ void inorder_to_array(struct tree* node, int arr[], int* i) {
     inorder_to_array(node->right, arr, i);
 }
 
-struct tree* bst_to_avl(struct tree* root) {
+struct tree* bst_to_avl(struct tree* root) {// bst_to_avl(root)
     int n = count_nodes(root);
     int* arr = (int*)malloc(n * sizeof(int));
     int i = 0;
@@ -272,7 +277,7 @@ struct tree* bst_to_avl(struct tree* root) {
 
 
 ///////////////////////////MISC/////////////////////
-int* generate_random_array(int length) {
+int* generate_random_array(int length) {// generate_random_array(20)
     int* array = malloc(length * sizeof(int));
 
     // initialize the array with unique random integers
