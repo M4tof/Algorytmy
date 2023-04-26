@@ -173,12 +173,16 @@ int search(struct tree *root, int x){
         height++;
         if(x > ptr->info){
             ptr = ptr->right;
-            poz[height-1]='R';}
+            poz[height]='R';}
         else if(x < ptr->info){
             ptr = ptr->left;
-            poz[height-1]='L';} 
+            poz[height]='L';} 
         else{
-            return height;}
+            for(int i=0;i<=height;i++){
+                printf("%c",poz[i]);
+                }
+            return height;
+            }
     }
     return 0; // return NULL if the node is not found
 }

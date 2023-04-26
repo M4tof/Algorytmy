@@ -1,5 +1,5 @@
-import random
 import math
+import random
 
 MacierzSąsiedztwa=[]    
 RowList=[]
@@ -35,6 +35,20 @@ def DAGen(N):
             MacierzSąsiedztwa[IntToDel][Y]=0
             ToDell-=1
 
+def Macierz2Lista():
+    global MacierzSąsiedztwa
+    for n in range(len(MacierzSąsiedztwa)):
+        TempList=[n+1]
+        for Xn in range(len(MacierzSąsiedztwa[0])):
+            if MacierzSąsiedztwa[n][Xn]==1:
+                TempList.append(Xn+1)
+        ListaIncydencji.append(TempList)
+
+def PrintListaIncydencji():
+    global ListaIncydencji
+    for i in range(len(ListaIncydencji)):
+        print(ListaIncydencji[i])
+
 def PrintMacierzSąsiedztwa():
     global MacierzSąsiedztwa, RowList
     N = len(MacierzSąsiedztwa)
@@ -42,13 +56,26 @@ def PrintMacierzSąsiedztwa():
     for i in range(N):
         print(i+1,MacierzSąsiedztwa[i])
 
-DAGen(3)
-PrintMacierzSąsiedztwa()
+def ClearData():
+    global MacierzSąsiedztwa, RowList, ListaIncydencji
+    MacierzSąsiedztwa=[]
+    ListaIncydencji=[]
+    RowList=[]
 
-def Macierz2Lista(Macierz):
-    for n in range(len(Macierz)):
-        TempList=[n+1]
-        for Xn in range(len(Macierz[0])):
-            if Macierz[n][Xn]==1:
-                TempList.append(Xn+1)
-        ListaIncydencji.append(TempList)
+def main():
+    global MacierzSąsiedztwa, RowList, ListaIncydencji
+    for N in range(3,6):
+        DAGen(N)
+        PrintMacierzSąsiedztwa() #1 from R to C , 2 from C to R
+    
+        Macierz2Lista()
+        print("")
+        PrintListaIncydencji()
+
+        ClearData()
+        print("")
+
+
+
+
+main()
