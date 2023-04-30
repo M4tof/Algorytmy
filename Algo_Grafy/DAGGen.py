@@ -52,3 +52,5 @@ def Macierz2Lista(Macierz):
             if Macierz[n][Xn]==1:
                 TempList.append(Xn+1)
         ListaIncydencji.append(TempList)
+
+Macierz2Lista(MacierzSąsiedztwa)

@@ -156,6 +156,6 @@ def main():
 
 
 #############DO #########################
-File = open("./wyniki.txt","a")
+File = open("./wyniki2.txt","a")
 main()
 File.close()
