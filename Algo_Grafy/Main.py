@@ -81,16 +81,17 @@ def TarjanaMacierz(Row,N): #TarjanaMacierz(1,1)
     for i in range(N):
         if MacierzSąsiedztwa[Row][i]==1 and (i+1 not in SzareM) and (i+1 not in CzarneM):
             TarjanaMacierz(i,N)
-    CzarneM.append(Row+1)
+    if(Row+1 not in CzarneM):
+        CzarneM.append(Row+1)
 
 def TarjanaLista(Row):
     global ListaIncydencji,SzareL,CzarneL
-    SzareL.append(ListaIncydencji[Row][0])
+    SzareL.append(Row +1)
     for i in range(1,len(ListaIncydencji[Row])):
-        if (ListaIncydencji[Row][i] not in SzareL) and (ListaIncydencji[Row][i] not in CzarneL):
-            Poz = ListaIncydencji[Row][i] -1
-            TarjanaLista(Poz)
-    CzarneL.append(ListaIncydencji[Row][0])
+        if (ListaIncydencji[Row][i] not in SzareL):
+            TarjanaLista(ListaIncydencji[Row][i] -1)
+    if(Row +1 not in CzarneL):
+        CzarneL.append(Row +1)
 
 
 
@@ -101,7 +102,7 @@ def main():
     for N in range(1,16):
         
         print("DAG done "+str(N))
-        N=N*200
+        N=N*300
         
         DAGen(N)
         
@@ -132,9 +133,9 @@ def main():
 
         print("Time 2 start")
         File.write(str(N)+"L,")
-        startTime = time.time()
         
         k=0
+        startTime = time.time()
         while len(CzarneL)!=len(RowList):
             TarjanaLista(k)
             k+=1
@@ -157,5 +158,6 @@ def main():
 
 #############DO #########################
 File = open("./wyniki.txt","a")
-main()
+for i in range(3):
+    main()
 File.close()
