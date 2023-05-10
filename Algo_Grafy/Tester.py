@@ -4,6 +4,7 @@ import sys
 import random
 
 sys.setrecursionlimit(2000000)
+
 MacierzSąsiedztwa=[]    
 RowList=[]
 ListaIncydencji=[]
@@ -12,7 +13,7 @@ CzarneM=[]
 SzareL=[]
 CzarneL=[]
 
-def DAGen(N,G):
+def DAGen(N):
     global MacierzSąsiedztwa, RowList
     for y in range(N):
         MacierzSąsiedztwa.append([0]*N)
@@ -23,10 +24,10 @@ def DAGen(N,G):
     for Y in range(N):
         for X in range(Y+1,N):
             MacierzSąsiedztwa[Y][X]=1 #1 is conection from Row to Column
-            MacierzSąsiedztwa[X][Y]=-1 #2 is conection from Column to Row
+            MacierzSąsiedztwa[X][Y]=2 #2 is conection from Column to Row
 
     Full = N*(N-1)/2
-    ToDell = math.trunc(Full*G)
+    ToDell = math.trunc(Full*0.4)
 
     while ToDell > 0:
         Y = random.randint(0,N-1)
@@ -47,8 +48,8 @@ def Macierz2Lista():
     for n in range(len(MacierzSąsiedztwa)):
         TempList=[n+1]
         for Xn in range(len(MacierzSąsiedztwa[0])):
-            if MacierzSąsiedztwa[n][Xn]>0:
-                TempList.append([Xn+1,MacierzSąsiedztwa[n][Xn]])
+            if MacierzSąsiedztwa[n][Xn]==1:
+                TempList.append(Xn+1)
         ListaIncydencji.append(TempList)
 
 def PrintListaIncydencji():
@@ -75,17 +76,24 @@ def ClearData():
     SzareL=[]
     CzarneL=[]
 
+def TarjanaMacierz(Row,N): #TarjanaMacierz(1,1)
+    global MacierzSąsiedztwa,SzareM,CzarneM
+    SzareM.append(Row+1)
+    for i in range(N):
+        if MacierzSąsiedztwa[Row][i]==1 and (i+1 not in SzareM) and (i+1 not in CzarneM):
+            TarjanaMacierz(i,N)
+    if(Row+1 not in CzarneM):
+        CzarneM.append(Row+1)
 
-def Wagi():
-    global MacierzSąsiedztwa
-    n=len(MacierzSąsiedztwa)
-    for Y in range(n):
-        for X in range(Y,n):
-            if MacierzSąsiedztwa[Y][X]!=0:
-                R=random.randint(1,1001)
-                MacierzSąsiedztwa[Y][X]=R
-                MacierzSąsiedztwa[X][Y]=R
-
+def TarjanaLista(Row):
+    global ListaIncydencji,SzareL,CzarneL
+    SzareL.append(Row +1)
+    for i in range(1,len(ListaIncydencji[Row])):
+        if (ListaIncydencji[Row][i] not in SzareL):
+            TarjanaLista(ListaIncydencji[Row][i] -1)
+    if(Row +1 not in CzarneL):
+        CzarneL.append(Row +1)
+    
 def PrimaMacierz():
     global MacierzSąsiedztwa
     
@@ -135,51 +143,44 @@ def PrimaLista():
             T.append(min_edge)
     
     #print(T)
-        
+
+def Plik2Macierz():
+    global MacierzSąsiedztwa, RowList
+    file = open('data.txt')
+    R = file.readlines()
+    file.close()
+    tab=[]
+    rtab=[]
+    inte=1
+    for i in R:
+        i=list(map(int,i.strip().split()))
+        tab.append(i)
+        rtab.append(inte)
+        inte+=1
+    MacierzSąsiedztwa= tab.copy()
+    RowList = rtab.copy()
+
 
 def main():
     global MacierzSąsiedztwa, RowList, ListaIncydencji,CzarneM,SzareM,CzarneL,SzareL
     
-    for N in range(1,16):
-        print("Start "+str(N))
+    N = len(MacierzSąsiedztwa)
+    
+    PrintMacierzSąsiedztwa()
+    
+    k=0
+    while len(CzarneM)!=len(RowList):
+        TarjanaMacierz(k,N)
+        k+=1
+    CzarneM=CzarneM[::-1]
         
-        N=N*50
-        DAGen(N,0) #0.7 ==30%   0.3==70%
-        Wagi()
+    print("Porządek Topologiczny -> ",CzarneM)
 
-        Macierz2Lista()
 
-        File.write(str(N)+"M,")
-        print("Time start")
-        startTime = time.time()
-        
-        PrimaMacierz()
-        
-        endTime= time.time()    #time at end #NANO MACHINES SON !
-        totalTime= endTime - startTime  #run time
-
-        File.write(str(totalTime)+"\n")
-        print("Time end")
-
-        print("Time 2 start")
-        File.write(str(N)+"L,")     
-        startTime = time.time()        
-        
-        PrimaLista()
-
-        endTime= time.time()    #time at end #NANO MACHINES SON !
-        totalTime= endTime - startTime  #run time
-
-        File.write(str(totalTime)+"\n")
-        print("Time 2 end")
-
-        ClearData()
     
     
 
 
 #############DO #########################
-File = open("./wyniki2.txt","a")
-File.write("70%\n")
+Plik2Macierz()
 main()
-File.close()
