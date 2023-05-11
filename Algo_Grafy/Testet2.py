@@ -173,13 +173,10 @@ def main():
     
     N = len(MacierzSąsiedztwa)
     
-    #PrintMacierzSąsiedztwa()
+    PrintMacierzSąsiedztwa()
     
     PrimaMacierz()
 
-
-    
-    
 
 
 #############DO #########################
