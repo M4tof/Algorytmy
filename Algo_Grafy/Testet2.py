@@ -178,7 +178,7 @@ def main():
     PrimaMacierz()
 
 
-
+#############Make Sure Your In The Right Directory#########
 #############DO #########################
 Plik2Macierz()
 main()
