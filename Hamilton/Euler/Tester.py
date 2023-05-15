@@ -13,6 +13,12 @@ def PrintMacierzSąsiedztwa(MacierzSąsiedztwa):
         print(i+1,MacierzSąsiedztwa[i])
     print("")
 
+def PrintCykl(Cykl):
+    a=Cykl.copy()
+    for i in range (len(Cykl)):
+        a[i]=a[i]+1
+    print(a)
+
 def GenerateGraph(MacierzSąsiedztwa,N,G): #który obiekt, po ile wierzchołków, gęstość
     for y in range(N):
         MacierzSąsiedztwa.append([0]*N)
@@ -38,7 +44,7 @@ def GenerateGraph(MacierzSąsiedztwa,N,G): #który obiekt, po ile wierzchołków
             MacierzSąsiedztwa[IntToDel][Y]=0
             ToDell-=1    
 
-def EulerReady(MacierzSąsiedztwa):   #TUTAJ COŚ TRZA POPRAWIĆ
+def EulerReady(MacierzSąsiedztwa):
     Nieparzyste=[]
     n=len(MacierzSąsiedztwa)
     for y in range(n):
@@ -58,24 +64,29 @@ def EulerReady(MacierzSąsiedztwa):   #TUTAJ COŚ TRZA POPRAWIĆ
                 MacierzSąsiedztwa[Y][X]=1
                 Nieparzyste.remove(Nieparzyste[0])
                 Nieparzyste.remove(X)
-        
     
 
 
-def CyklHamiltonaMain(MacierzSąsiedztwa,start):
+def CyklHamiltonaMain(Macierz):
     V=[]
+    n=len(Macierz)
 
-    def CyklHamiltonaSub(MacierzSąsiedztwa,v):
+    def NewHamiltionianSub(v):
         V.append(v)
-        for i in range(len(MacierzSąsiedztwa)):
-            if (i not in V) and (MacierzSąsiedztwa[v][i]==1):
-                CyklHamiltonaSub(MacierzSąsiedztwa,i)
-        if (len(V)==len(MacierzSąsiedztwa)) and (MacierzSąsiedztwa[V[-1]][start]==1):
-            return v
+        for w in range(0,n):
+            if (w not in V) and (Macierz[w][v]==1):
+                NewHamiltionianSub(w)
+        if (len(V)==(n)):
+            if(Macierz[v][I]==1):
+                return True
         else:
             V.remove(v)
-    CyklHamiltonaSub(MacierzSąsiedztwa,start)
-    return(V)
+    
+    I=0
+    NewHamiltionianSub(I)
+
+    V.append(I)
+    return V
 
 def CyklEuleraMain(MacierzSąsiedztwa,v):
     Cykl=[]
@@ -88,40 +99,49 @@ def CyklEuleraMain(MacierzSąsiedztwa,v):
                 
                 CyklEuleraSub(MacierzSąsiedztwa,w)
         Cykl.append(v)
-    
+
     CyklEuleraSub(MacierzSąsiedztwa,v)
     
     return(Cykl)
 
-def PrintCykl(Cykl):
-    a=Cykl.copy()
-    for i in range (len(Cykl)):
-        a[i]=a[i]+1
-    print(a)
+def NewEulerMain(Macierz):
+    C=[]
+    n=len(Macierz)
 
-def FindEuler(Macierz):
-    i=0
-    while True:
-        if i>=len(Macierz):
-            return None
-        else:
-            if len(CyklEuleraMain(Macierz,i)) !=0:
-                ToPrint=(CyklEuleraMain(Macierz,i))
-                return ToPrint
-            i+=1
+    def NewEuler(v):
+        for u in range(n):
+            if Macierz[u][v]==1:
+                Macierz[u][v]=0
+                Macierz[v][u]=0
+                NewEuler(u)
+        C.append(v)
+    
+    NewEuler(0)
+    return C
+
 
 
 for i in range(1):
     
     if __name__ == "__main__":
-        for n in range(1,2):
+        for n in range(1,16): #(1,16)
             Macierz1=[] 
-            Macierz2=[[0,1,0,1,1,0],[1,0,1,0,1,1],[0,1,0,0,0,1],[1,0,0,0,1,1],[1,1,0,1,0,1],[0,1,1,1,1,0]]
-            
-            n=n*10
-            
-            GenerateGraph(Macierz1,n,0.7) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
-            EulerReady(Macierz1)
-            
+            Macierz2=[]
 
-            PrintMacierzSąsiedztwa(Macierz1)
+            x = 100
+            
+            n=n*x
+            
+            g = 0.35
+
+            GenerateGraph(Macierz1,n,g) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
+            EulerReady(Macierz1)
+
+            GenerateGraph(Macierz2,n,g) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
+            EulerReady(Macierz2)
+
+            print("Generation done", n//x)
+
+            
+           
+            #a = CyklHamiltonaMain(Macierz2)

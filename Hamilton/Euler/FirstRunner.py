@@ -124,20 +124,24 @@ def NewEulerMain(Macierz):
 for i in range(1):
     
     if __name__ == "__main__":
-        for n in range(1,2): #(1,16)
+        for n in range(1,16): #(1,16)
             Macierz1=[] 
             Macierz2=[]
 
-            n=n*50
+            x = 100
             
-            g = 0.7
+            n=n*x
+            
+            g = 0.35
+
             GenerateGraph(Macierz1,n,g) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
             EulerReady(Macierz1)
 
-            GenerateGraph(Macierz2,n,g)
+            GenerateGraph(Macierz2,n,g) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
             EulerReady(Macierz2)
+
+            print("Generation done", n//x)
+
             
-            #PrintMacierzSąsiedztwa(Macierz3)
-            
-            PrintCykl(NewEulerMain(Macierz1))
-            PrintCykl(CyklHamiltonaMain(Macierz2))
+           
+            #a = CyklHamiltonaMain(Macierz2)
