@@ -124,11 +124,11 @@ def NewEulerMain(Macierz):
 for i in range(1):
     
     if __name__ == "__main__":
-        for n in range(1,16): #(1,16)
+        for n in range(1,2): #(1,16)
             Macierz1=[] 
             Macierz2=[]
 
-            n=n*100
+            n=n*50
             
             g = 0.7
             GenerateGraph(Macierz1,n,g) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
