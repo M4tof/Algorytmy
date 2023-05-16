@@ -3,38 +3,8 @@ import math
 import time
 import sys
 import random
-
 sys.setrecursionlimit(2000000)
 
-def generate_eulerian_graph(size, saturation):
-    """
-    Generates an adjacency matrix for a graph with an Eulerian cycle.
-
-    Args:
-        size: The size of the adjacency matrix (number of vertices).
-        saturation: The saturation of the graph, represented as a decimal between 0 and 1.
-                    A saturation of 1 corresponds to a complete graph, while 0 corresponds to no edges.
-
-    Returns:
-        The adjacency matrix representing the generated graph.
-    """
-    adjacency_matrix = [[0] * size for _ in range(size)]
-    max_edges = size * (size - 1)  # Maximum number of edges in a directed graph
-
-    num_edges = int(saturation * max_edges)
-    edges_added = 0
-
-    # Add edges to the graph until the desired number of edges is reached
-    while edges_added < num_edges:
-        src = random.randint(0, size - 1)
-        dst = random.randint(0, size - 1)
-
-        # Ensure the edge doesn't already exist and it's not a self-loop
-        if adjacency_matrix[src][dst] == 0 and src != dst:
-            adjacency_matrix[src][dst] = 1
-            edges_added += 1
-
-    return adjacency_matrix
 
 def find_eulerian_cycle(adj_matrix):
     """
@@ -122,114 +92,104 @@ def dfs(adj_matrix, vertex, visited):
         if adj_matrix[vertex][neighbor] == 1 and not visited[neighbor]:
             dfs(adj_matrix, neighbor, visited)
 
-def find_hamiltonian_cycle(adj_matrix):
-    """
-    Finds a Hamiltonian cycle in a graph represented by an adjacency matrix.
 
-    Args:
-        adj_matrix: The adjacency matrix of a graph.
+def PrintMacierzSąsiedztwa(MacierzSąsiedztwa):
+    RowList=list(range(1,len(MacierzSąsiedztwa)+1))
+    N = len(MacierzSąsiedztwa)
+    print(" ",RowList)
+    for i in range(N):
+        print(i+1,MacierzSąsiedztwa[i])
+    print("")
 
-    Returns:
-        A list of vertices representing the Hamiltonian cycle, or an empty list if no cycle is found.
-    """
-    n = len(adj_matrix)
-    visited = [False] * n
-    path = []
+def PrintCykl(Cykl):
+    a=Cykl.copy()
+    for i in range (len(Cykl)):
+        a[i]=a[i]+1
+    print(a)
 
-    # Start from the first vertex
-    path.append(0)
-    visited[0] = True
-
-    if find_hamiltonian_cycle_helper(adj_matrix, visited, path, 1):
-        return path
-
-    return []
-
-
-def find_hamiltonian_cycle_helper(adj_matrix, visited, path, pos):
-    """
-    Helper function for finding a Hamiltonian cycle using backtracking.
-
-    Args:
-        adj_matrix: The adjacency matrix of a graph.
-        visited: A list to track visited vertices.
-        path: A list representing the current path.
-        pos: The position in the path.
-
-    Returns:
-        True if a Hamiltonian cycle is found, False otherwise.
-    """
-    n = len(adj_matrix)
-
-    # Base case: If all vertices are visited and the last vertex is connected to the first vertex
-    if pos == n and adj_matrix[path[pos - 1]][path[0]] == 1:
-        return True
-
-    # Try different vertices as the next candidate in the path
-    for v in range(1, n):
-        if is_valid_next_vertex(v, adj_matrix, visited, path, pos):
-            path[pos] = v
-            visited[v] = True
-
-            if find_hamiltonian_cycle_helper(adj_matrix, visited, path, pos + 1):
-                return True
-
-            # Backtrack if the current candidate does not lead to a Hamiltonian cycle
-            path[pos] = -1
-            visited[v] = False
-
-    return False
-
-
-def is_valid_next_vertex(v, adj_matrix, visited, path, pos):
-    """
-    Checks if a vertex v is a valid candidate for the next position in the Hamiltonian cycle.
-
-    Args:
-        v: The vertex to check.
-        adj_matrix: The adjacency matrix of a graph.
-        visited: A list to track visited vertices.
-        path: A list representing the current path.
-        pos: The current position in the path.
-
-    Returns:
-        True if the vertex is a valid candidate, False otherwise.
-    """
-    n = len(adj_matrix)
-
-    # Check if the vertex is connected to the previous vertex in the path
-    if adj_matrix[path[pos - 1]][v] == 0:
-        return False
-
-    # Check if the vertex has already been visited
-    if visited[v]:
-        return False
-
-    return True
-
-for i in range(1):
-    matrix_size = 100
-    saturation = 1
-
-    adjacency_matrix = generate_eulerian_graph(matrix_size, saturation)
-    adjacency_matrix2=adjacency_matrix.copy()
-
-    eulerian_cycle = find_eulerian_cycle(adjacency_matrix)
-
-    if eulerian_cycle is None:
-        print("No Eulerian cycle exists.")
-    else:
-        print("Eulerian cycle:", eulerian_cycle)
-
-    adjacency_matrix2=[[0, 1, 1, 1, 0],
-    [1, 0, 1, 0, 1],
-    [1, 1, 0, 1, 1],
-    [1, 0, 1, 0, 1],
-    [0, 1, 1, 1, 0]]
-    hamiltonian_cycle = find_hamiltonian_cycle(adjacency_matrix2)
-
-    if hamiltonian_cycle:
-        print("Hamiltonian cycle found:", hamiltonian_cycle)
-    else:
-        print("No Hamiltonian cycle found.")
+def GenerateGraph(MacierzSąsiedztwa,N,G): #który obiekt, po ile wierzchołków, gęstość
+    for y in range(N):
+        MacierzSąsiedztwa.append([0]*N)
     
+    for Y in range(N):
+        for X in range(Y+1,N):
+            MacierzSąsiedztwa[Y][X]=1 #1 is conection from Row to Column
+            MacierzSąsiedztwa[X][Y]=-1
+    
+    ToDell = N*(N-1)/2
+    ToDell = math.trunc(ToDell*(1-G))
+
+    while ToDell > 0:
+        Y = random.randint(0,N-1)
+        if (MacierzSąsiedztwa[Y].count(1) > 1):
+            
+            while True:
+                IntToDel=random.randint(Y+1,N-1)
+                if(MacierzSąsiedztwa[Y][IntToDel]==1):
+                    break
+
+            MacierzSąsiedztwa[Y][IntToDel]=0
+            MacierzSąsiedztwa[IntToDel][Y]=0
+            ToDell-=1    
+
+def EulerReady(MacierzSąsiedztwa):
+    Nieparzyste=[]
+    n=len(MacierzSąsiedztwa)
+    for y in range(n):
+        for x in range(n):
+            if MacierzSąsiedztwa[y][x]==-1:
+                MacierzSąsiedztwa[y][x]=1
+    
+    for y in range(n):
+        if (MacierzSąsiedztwa[y].count(1))%2 == 1:
+            Nieparzyste.append(y)
+    
+
+    PrintMacierzSąsiedztwa(MacierzSąsiedztwa)
+    while len(Nieparzyste)>0:
+        print(Nieparzyste)
+        if len(Nieparzyste)>1:
+            x='a'
+            y='a'
+            control=0
+            for Y in Nieparzyste:
+                for X in Nieparzyste:
+                    if Y!=X and MacierzSąsiedztwa[Y][X]==0:
+                        x=X
+                        y=Y
+                        control=0
+                    if Y!=X and MacierzSąsiedztwa[Y][X]==1:
+                        x=X
+                        y=Y
+                        control=1
+            
+            if control==0:
+                MacierzSąsiedztwa[x][y]==1
+                MacierzSąsiedztwa[y][x]==1
+                Nieparzyste.remove(x)
+                Nieparzyste.remove(y)
+            else:
+                MacierzSąsiedztwa[x][y]==0
+                MacierzSąsiedztwa[y][x]==0
+                Nieparzyste.remove(x)
+                Nieparzyste.remove(y)
+
+        elif len(Nieparzyste)==1:
+            for Yy in range(n):
+                MacierzSąsiedztwa[Yy][Nieparzyste[0]]==0
+                MacierzSąsiedztwa[Nieparzyste[0]][Yy]==0
+    
+
+Macierz=[]
+
+GenerateGraph(Macierz,10,0.3) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
+PrintMacierzSąsiedztwa(Macierz)
+print("H")
+
+EulerReady(Macierz)
+PrintMacierzSąsiedztwa(Macierz)
+print("H2")
+
+print(find_eulerian_cycle(Macierz))
+print("H3")
+

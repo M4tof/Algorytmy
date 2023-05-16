@@ -3,7 +3,7 @@ import time
 import sys
 import random
 
-sys.setrecursionlimit(2000000)
+sys.setrecursionlimit(2000000000)
 
 def PrintMacierzSąsiedztwa(MacierzSąsiedztwa):
     RowList=list(range(1,len(MacierzSąsiedztwa)+1))
@@ -56,14 +56,38 @@ def EulerReady(MacierzSąsiedztwa):
         if (MacierzSąsiedztwa[y].count(1))%2 == 1:
             Nieparzyste.append(y)
     
-    while len(Nieparzyste)>2:
-        Y=Nieparzyste[0]
-        for X in Nieparzyste:
-            if X!=Y and MacierzSąsiedztwa[X][Y]==0:
-                MacierzSąsiedztwa[X][Y]=1
-                MacierzSąsiedztwa[Y][X]=1
-                Nieparzyste.remove(Nieparzyste[0])
-                Nieparzyste.remove(X)
+
+    while len(Nieparzyste)>0:
+        if len(Nieparzyste)>1:
+            x='a'
+            y='a'
+            control=0
+            for Y in Nieparzyste:
+                for X in Nieparzyste:
+                    if Y!=X and MacierzSąsiedztwa[Y][X]==0:
+                        x=X
+                        y=Y
+                        control=0
+                    if Y!=X and MacierzSąsiedztwa[Y][X]==1:
+                        x=X
+                        y=Y
+                        control=1
+            
+            if control==0:
+                MacierzSąsiedztwa[x][y]==1
+                MacierzSąsiedztwa[y][x]==1
+                Nieparzyste.remove(x)
+                Nieparzyste.remove(y)
+            else:
+                MacierzSąsiedztwa[x][y]==0
+                MacierzSąsiedztwa[y][x]==0
+                Nieparzyste.remove(x)
+                Nieparzyste.remove(y)
+
+        elif len(Nieparzyste)==1:
+            for Yy in range(n):
+                MacierzSąsiedztwa[Yy][Nieparzyste[0]]==0
+                MacierzSąsiedztwa[Nieparzyste[0]][Yy]==0
     
 
 
@@ -88,31 +112,16 @@ def CyklHamiltonaMain(Macierz):
     V.append(I)
     return V
 
-def CyklEuleraMain(MacierzSąsiedztwa,v):
-    Cykl=[]
-    Zwiedzone=[]
-
-    def CyklEuleraSub(MacierzSąsiedztwa,v):
-        for w in range(len(MacierzSąsiedztwa)):
-            if ([v,w] not in Zwiedzone) and ([w,v] not in Zwiedzone) and (MacierzSąsiedztwa[v][w]==1):
-                Zwiedzone.append([v,w])
-                
-                CyklEuleraSub(MacierzSąsiedztwa,w)
-        Cykl.append(v)
-
-    CyklEuleraSub(MacierzSąsiedztwa,v)
-    
-    return(Cykl)
-
 def NewEulerMain(Macierz):
+    M=Macierz.copy()
     C=[]
     n=len(Macierz)
 
     def NewEuler(v):
         for u in range(n):
-            if Macierz[u][v]==1:
-                Macierz[u][v]=0
-                Macierz[v][u]=0
+            if M[u][v]==1:
+                M[u][v]=0
+                M[v][u]=0
                 NewEuler(u)
         C.append(v)
     
@@ -125,10 +134,10 @@ for i in range(1):
     
     if __name__ == "__main__":
         for n in range(1,16): #(1,16)
-            Macierz1=[] 
+            Macierz1=[]
             Macierz2=[]
 
-            x = 100
+            x = 50
             
             n=n*x
             
@@ -142,6 +151,7 @@ for i in range(1):
 
             print("Generation done", n//x)
 
+            print(NewEulerMain(Macierz1)[0])
             
            
             #a = CyklHamiltonaMain(Macierz2)
