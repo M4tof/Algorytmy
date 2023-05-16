@@ -127,6 +127,7 @@ def NewEulerMain(Macierz):
             if Macierz[u][v]==1:
                 Macierz[u][v]=0
                 Macierz[v][u]=0
+                time.sleep(0.00002)
                 NewEuler(u)
         C.append(v)
     
@@ -138,13 +139,14 @@ def NewEulerMain(Macierz):
 
 Macierz=[]
 
-GenerateGraph(Macierz,130,0.7) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
+GenerateGraph(Macierz,75,0.3) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
 #PrintMacierzSąsiedztwa(Macierz)
 print("H")
 EulerReady(Macierz)
 print("H2")
 
 NewEulerMain(Macierz)
+
 
 
 print("H3")

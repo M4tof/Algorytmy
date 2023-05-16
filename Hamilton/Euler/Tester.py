@@ -3,7 +3,11 @@ import math
 import time
 import sys
 import random
-sys.setrecursionlimit(2000000)
+
+sys.setrecursionlimit(9999999)
+
+
+
 
 def PrintMacierzSąsiedztwa(MacierzSąsiedztwa):
     RowList=list(range(1,len(MacierzSąsiedztwa)+1))
@@ -97,64 +101,73 @@ def EulerReady(MacierzSąsiedztwa):
                 MacierzSąsiedztwa[Yy][Nieparzyste[0]]=0
                 MacierzSąsiedztwa[Nieparzyste[0]][Yy]=0
     
+def euler(v, adj_matrix, euler_cycle):
+    for w in range(len(adj_matrix)):
+        if adj_matrix[v][w] == 1:
+            adj_matrix[v][w] = 0  # Mark the edge as visited
+            euler(w, adj_matrix, euler_cycle)
+
+    euler_cycle.append(v)
+
+def find_euler_cycle(adj_matrix):
+    num_vertices = len(adj_matrix)
+    euler_cycle = []
+    euler(0, adj_matrix, euler_cycle)
+
+    euler_cycle.reverse()  # Reverse to get the correct order
+
+    return euler_cycle
 
 def NewEulerMain(Macierz):
-    M=Macierz.copy()
     C=[]
     n=len(Macierz)
 
     def NewEuler(v):
         for u in range(n):
-            if M[u][v]==1:
-                M[u][v]=0
-                M[v][u]=0
+            if Macierz[u][v]==1:
+                Macierz[u][v]=0
+                Macierz[v][u]=0
+                time.sleep(0.00002)
                 NewEuler(u)
         C.append(v)
     
     NewEuler(0)
     return C
 
-def find_euler_cycle(adj_matrix):
-    # Initialize variables
-    num_vertices = len(adj_matrix)
-    euler_cycle = []
-    stack = [0]  # Start from vertex 0
-    current_vertex = 0
+def CyklHamiltonaMain(Macierz):
+    V=[]
+    n=len(Macierz)
 
-    while stack:
-        if any(adj_matrix[current_vertex]):
-            # Find an unvisited neighbor of the current vertex
-            for neighbor in range(num_vertices):
-                if adj_matrix[current_vertex][neighbor] == 1:
-                    # Add the current vertex to the stack
-                    stack.append(current_vertex)
-                    # Remove the edge between current vertex and neighbor
-                    adj_matrix[current_vertex][neighbor] = 0
-                    adj_matrix[neighbor][current_vertex] = 0
-                    # Move to the neighbor
-                    current_vertex = neighbor
-                    break
+    def NewHamiltionianSub(v):
+        V.append(v)
+        for w in range(0,n):
+            if (w not in V) and (Macierz[w][v]==1):
+                time.sleep(0.00002)
+                NewHamiltionianSub(w)
+        if (len(V)==(n)):
+            if(Macierz[v][I]==1):
+                return True
         else:
-            # Backtrack to the previous vertex
-            euler_cycle.append(current_vertex)
-            current_vertex = stack.pop()
+            V.remove(v)
+    
+    I=0
+    NewHamiltionianSub(I)
 
-    # Add the last vertex to complete the cycle
-    euler_cycle.append(current_vertex)
-    euler_cycle.reverse()  # Reverse to get the correct order
-
-    return euler_cycle
+    V.append(I)
+    return V
+################################################################################################
 
 
 Macierz=[]
 
-GenerateGraph(Macierz,200,0.3) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
+GenerateGraph(Macierz,75,0.3) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
 #PrintMacierzSąsiedztwa(Macierz)
 print("H")
-
 EulerReady(Macierz)
 print("H2")
 
-PrintCykl(find_euler_cycle(Macierz))
-
+NewEulerMain(Macierz)
 print("H3")
+
+CyklHamiltonaMain(Macierz)
+print("H4")
