@@ -3,94 +3,10 @@ import math
 import time
 import sys
 import random
-sys.setrecursionlimit(2000000)
+
+sys.setrecursionlimit(9999999)
 
 
-def find_eulerian_cycle(adj_matrix):
-    """
-    Finds an Eulerian cycle in an adjacency matrix.
-
-    Args:
-        adj_matrix: A square matrix representing the adjacency matrix of a graph.
-
-    Returns:
-        A list of vertices representing the Eulerian cycle, or None if no cycle exists.
-    """
-    n = len(adj_matrix)
-
-    # Check if the graph is connected
-    if not is_connected(adj_matrix):
-        return None
-
-    # Create a copy of the adjacency matrix to track edges
-    edge_matrix = [[adj_matrix[i][j] for j in range(n)] for i in range(n)]
-
-    # Start with an arbitrary vertex
-    cycle = [0]  # Initialize the Eulerian cycle with the first vertex
-
-    while True:
-        current_vertex = cycle[-1]
-
-        # Check if there are any unused edges from the current vertex
-        if sum(edge_matrix[current_vertex]) == 0:
-            # Check if all edges have been used
-            if all(sum(row) == 0 for row in edge_matrix):
-                return cycle  # Return the Eulerian cycle
-
-            return None  # No Eulerian cycle exists
-
-        # Find the next unvisited neighbor of the current vertex
-        for next_vertex in range(n):
-            if edge_matrix[current_vertex][next_vertex] == 1:
-                # Remove the edge from the matrix
-                edge_matrix[current_vertex][next_vertex] = 0
-                edge_matrix[next_vertex][current_vertex] = 0
-
-                # Add the next vertex to the cycle
-                cycle.append(next_vertex)
-                break
-
-    return None  # No Eulerian cycle exists
-
-
-def is_connected(adj_matrix):
-    """
-    Checks if an adjacency matrix represents a connected graph.
-
-    Args:
-        adj_matrix: A square matrix representing the adjacency matrix of a graph.
-
-    Returns:
-        True if the graph is connected, False otherwise.
-    """
-    n = len(adj_matrix)
-    visited = [False] * n
-
-    # Perform depth-first search (DFS) starting from the first vertex
-    dfs(adj_matrix, 0, visited)
-
-    # Check if all vertices were visited
-    return all(visited)
-
-
-def dfs(adj_matrix, vertex, visited):
-    """
-    Performs depth-first search (DFS) on a graph represented by an adjacency matrix.
-
-    Args:
-        adj_matrix: A square matrix representing the adjacency matrix of a graph.
-        vertex: The current vertex.
-        visited: A list of boolean values indicating whether a vertex has been visited.
-
-    Returns:
-        None
-    """
-    visited[vertex] = True
-
-    # Visit all neighbors of the current vertex
-    for neighbor in range(len(adj_matrix)):
-        if adj_matrix[vertex][neighbor] == 1 and not visited[neighbor]:
-            dfs(adj_matrix, neighbor, visited)
 
 
 def PrintMacierzSąsiedztwa(MacierzSąsiedztwa):
@@ -145,9 +61,13 @@ def EulerReady(MacierzSąsiedztwa):
             Nieparzyste.append(y)
     
 
-    PrintMacierzSąsiedztwa(MacierzSąsiedztwa)
+    
+    
     while len(Nieparzyste)>0:
-        print(Nieparzyste)
+        
+        #PrintMacierzSąsiedztwa(MacierzSąsiedztwa)
+        #print(Nieparzyste)
+        
         if len(Nieparzyste)>1:
             x='a'
             y='a'
@@ -158,38 +78,73 @@ def EulerReady(MacierzSąsiedztwa):
                         x=X
                         y=Y
                         control=0
-                    if Y!=X and MacierzSąsiedztwa[Y][X]==1:
+                    elif Y!=X and MacierzSąsiedztwa[Y][X]==1:
                         x=X
                         y=Y
                         control=1
             
+           # print(x,y,control)
+            
             if control==0:
-                MacierzSąsiedztwa[x][y]==1
-                MacierzSąsiedztwa[y][x]==1
+                MacierzSąsiedztwa[x][y]=1
+                MacierzSąsiedztwa[y][x]=1
                 Nieparzyste.remove(x)
                 Nieparzyste.remove(y)
             else:
-                MacierzSąsiedztwa[x][y]==0
-                MacierzSąsiedztwa[y][x]==0
-                Nieparzyste.remove(x)
+                MacierzSąsiedztwa[x][y]=0
+                MacierzSąsiedztwa[y][x]=0
+                Nieparzyste.remove(x)                           #1 2 3 4 6 9
                 Nieparzyste.remove(y)
 
         elif len(Nieparzyste)==1:
             for Yy in range(n):
-                MacierzSąsiedztwa[Yy][Nieparzyste[0]]==0
-                MacierzSąsiedztwa[Nieparzyste[0]][Yy]==0
+                MacierzSąsiedztwa[Yy][Nieparzyste[0]]=0
+                MacierzSąsiedztwa[Nieparzyste[0]][Yy]=0
     
+def euler(v, adj_matrix, euler_cycle):
+    for w in range(len(adj_matrix)):
+        if adj_matrix[v][w] == 1:
+            adj_matrix[v][w] = 0  # Mark the edge as visited
+            euler(w, adj_matrix, euler_cycle)
+
+    euler_cycle.append(v)
+
+def find_euler_cycle(adj_matrix):
+    num_vertices = len(adj_matrix)
+    euler_cycle = []
+    euler(0, adj_matrix, euler_cycle)
+
+    euler_cycle.reverse()  # Reverse to get the correct order
+
+    return euler_cycle
+
+def NewEulerMain(Macierz):
+    C=[]
+    n=len(Macierz)
+
+    def NewEuler(v):
+        for u in range(n):
+            if Macierz[u][v]==1:
+                Macierz[u][v]=0
+                Macierz[v][u]=0
+                NewEuler(u)
+        C.append(v)
+    
+    NewEuler(0)
+    return C
+
+################################################################################################
+
 
 Macierz=[]
 
-GenerateGraph(Macierz,10,0.3) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
-PrintMacierzSąsiedztwa(Macierz)
+GenerateGraph(Macierz,130,0.7) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
+#PrintMacierzSąsiedztwa(Macierz)
 print("H")
-
 EulerReady(Macierz)
-PrintMacierzSąsiedztwa(Macierz)
 print("H2")
 
-print(find_eulerian_cycle(Macierz))
-print("H3")
+NewEulerMain(Macierz)
 
+
+print("H3")
