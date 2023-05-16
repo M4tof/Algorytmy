@@ -56,7 +56,7 @@ def EulerReady(MacierzSąsiedztwa):
         if (MacierzSąsiedztwa[y].count(1))%2 == 1:
             Nieparzyste.append(y)
     
-    while len(Nieparzyste)>2:
+    while len(Nieparzyste)>0:
         Y=Nieparzyste[0]
         for X in Nieparzyste:
             if X!=Y and MacierzSąsiedztwa[X][Y]==0:
@@ -88,22 +88,6 @@ def CyklHamiltonaMain(Macierz):
     V.append(I)
     return V
 
-def CyklEuleraMain(MacierzSąsiedztwa,v):
-    Cykl=[]
-    Zwiedzone=[]
-
-    def CyklEuleraSub(MacierzSąsiedztwa,v):
-        for w in range(len(MacierzSąsiedztwa)):
-            if ([v,w] not in Zwiedzone) and ([w,v] not in Zwiedzone) and (MacierzSąsiedztwa[v][w]==1):
-                Zwiedzone.append([v,w])
-                
-                CyklEuleraSub(MacierzSąsiedztwa,w)
-        Cykl.append(v)
-
-    CyklEuleraSub(MacierzSąsiedztwa,v)
-    
-    return(Cykl)
-
 def NewEulerMain(Macierz):
     C=[]
     n=len(Macierz)
@@ -119,14 +103,105 @@ def NewEulerMain(Macierz):
     NewEuler(0)
     return C
 
+def find_eulerian_cycle(adj_matrix):
+    """
+    Finds an Eulerian cycle in an adjacency matrix.
+
+    Args:
+        adj_matrix: A square matrix representing the adjacency matrix of a graph.
+
+    Returns:
+        A list of vertices representing the Eulerian cycle, or None if no cycle exists.
+    """
+    n = len(adj_matrix)
+
+    # Check if the graph is connected
+    if not is_connected(adj_matrix):
+        return None
+
+    # Create a copy of the adjacency matrix to track edges
+    edge_matrix = [[adj_matrix[i][j] for j in range(n)] for i in range(n)]
+
+    # Start with an arbitrary vertex
+    cycle = [0]  # Initialize the Eulerian cycle with the first vertex
+
+    while True:
+        current_vertex = cycle[-1]
+
+        # Check if there are any unused edges from the current vertex
+        if sum(edge_matrix[current_vertex]) == 0:
+            # Check if all edges have been used
+            if all(sum(row) == 0 for row in edge_matrix):
+                return cycle  # Return the Eulerian cycle
+
+            return None  # No Eulerian cycle exists
+
+        # Find the next unvisited neighbor of the current vertex
+        for next_vertex in range(n):
+            if edge_matrix[current_vertex][next_vertex] == 1:
+                # Remove the edge from the matrix
+                edge_matrix[current_vertex][next_vertex] = 0
+                edge_matrix[next_vertex][current_vertex] = 0
+
+                # Add the next vertex to the cycle
+                cycle.append(next_vertex)
+                break
+
+    return None  # No Eulerian cycle exists
+
+
+def is_connected(adj_matrix):
+    """
+    Checks if an adjacency matrix represents a connected graph.
+
+    Args:
+        adj_matrix: A square matrix representing the adjacency matrix of a graph.
+
+    Returns:
+        True if the graph is connected, False otherwise.
+    """
+    n = len(adj_matrix)
+    visited = [False] * n
+
+    # Perform depth-first search (DFS) starting from the first vertex
+    dfs(adj_matrix, 0, visited)
+
+    # Check if all vertices were visited
+    return all(visited)
+
+
+def dfs(adj_matrix, vertex, visited):
+    """
+    Performs depth-first search (DFS) on a graph represented by an adjacency matrix.
+
+    Args:
+        adj_matrix: A square matrix representing the adjacency matrix of a graph.
+        vertex: The current vertex.
+        visited: A list of boolean values indicating whether a vertex has been visited.
+
+    Returns:
+        None
+    """
+    visited[vertex] = True
+
+    # Visit all neighbors of the current vertex
+    for neighbor in range(len(adj_matrix)):
+        if adj_matrix[vertex][neighbor] == 1 and not visited[neighbor]:
+            dfs(adj_matrix, neighbor, visited)
+
+
 
 
 for i in range(1):
     
     if __name__ == "__main__":
-        for n in range(1,16): #(1,16)
+        for n in range(1,2): #(1,16)
             Macierz1=[] 
-            Macierz2=[]
+            Macierz2=[[0, 1, 0, 1],
+    [1, 0, 1, 0],
+    [0, 1, 0, 1],
+    [1, 0, 1, 0]
+]
 
             x = 100
             
@@ -137,11 +212,12 @@ for i in range(1):
             GenerateGraph(Macierz1,n,g) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
             EulerReady(Macierz1)
 
-            GenerateGraph(Macierz2,n,g) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
-            EulerReady(Macierz2)
+            #GenerateGraph(Macierz2,n,g) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
+            #EulerReady(Macierz2)
 
             print("Generation done", n//x)
 
-            
+            #PrintCykl(NewEulerMain(Macierz1))
+            PrintCykl(find_eulerian_cycle(Macierz1))
            
             #a = CyklHamiltonaMain(Macierz2)
