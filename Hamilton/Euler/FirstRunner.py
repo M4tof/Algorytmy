@@ -2,6 +2,7 @@ import math
 import time
 import sys
 import random
+import multiprocessing
 
 sys.setrecursionlimit(2000000000)
 
@@ -55,9 +56,12 @@ def EulerReady(MacierzSąsiedztwa):
     for y in range(n):
         if (MacierzSąsiedztwa[y].count(1))%2 == 1:
             Nieparzyste.append(y)
-    
-
+        
     while len(Nieparzyste)>0:
+        
+        #PrintMacierzSąsiedztwa(MacierzSąsiedztwa)
+        #print(Nieparzyste)
+        
         if len(Nieparzyste)>1:
             x='a'
             y='a'
@@ -68,27 +72,36 @@ def EulerReady(MacierzSąsiedztwa):
                         x=X
                         y=Y
                         control=0
-                    if Y!=X and MacierzSąsiedztwa[Y][X]==1:
+                    elif Y!=X and MacierzSąsiedztwa[Y][X]==1:
                         x=X
                         y=Y
                         control=1
             
+           # print(x,y,control)
+            
             if control==0:
-                MacierzSąsiedztwa[x][y]==1
-                MacierzSąsiedztwa[y][x]==1
+                MacierzSąsiedztwa[x][y]=1
+                MacierzSąsiedztwa[y][x]=1
                 Nieparzyste.remove(x)
                 Nieparzyste.remove(y)
             else:
-                MacierzSąsiedztwa[x][y]==0
-                MacierzSąsiedztwa[y][x]==0
-                Nieparzyste.remove(x)
+                MacierzSąsiedztwa[x][y]=0
+                MacierzSąsiedztwa[y][x]=0
+                Nieparzyste.remove(x)                           #1 2 3 4 6 9
                 Nieparzyste.remove(y)
 
         elif len(Nieparzyste)==1:
             for Yy in range(n):
-                MacierzSąsiedztwa[Yy][Nieparzyste[0]]==0
-                MacierzSąsiedztwa[Nieparzyste[0]][Yy]==0
-    
+                MacierzSąsiedztwa[Yy][Nieparzyste[0]]=0
+                MacierzSąsiedztwa[Nieparzyste[0]][Yy]=0
+
+
+def HamiltonReady(MacierzSąsziedztwa):
+    n= len(MacierzSąsziedztwa)
+    for Y in range(n-1):
+        if MacierzSąsziedztwa[Y][Y+1]==0:
+            MacierzSąsziedztwa[Y][Y+1]=1
+            MacierzSąsziedztwa[Y+1][Y]=1
 
 
 def CyklHamiltonaMain(Macierz):
@@ -128,30 +141,33 @@ def NewEulerMain(Macierz):
     NewEuler(0)
     return C
 
+def run():
+    g = 0.35
+    Macierz1=[]
 
+    x = 200
+    n=x
 
-for i in range(1):
+    GenerateGraph(Macierz1,n,g) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
+    EulerReady(Macierz1)
+    #HamiltonReady(Macierz1)
+
+    print("Generation done", n//x)
+
+    print(CyklHamiltonaMain(Macierz1))
+
+    for i in range(len(Macierz1)):
+        file.write(str(Macierz1[i])+"\n")
     
-    if __name__ == "__main__":
-        for n in range(1,16): #(1,16)
-            Macierz1=[]
-            Macierz2=[]
 
-            x = 50
-            
-            n=n*x
-            
-            g = 0.35
+file=open("graf.txt", "w")
 
-            GenerateGraph(Macierz1,n,g) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
-            EulerReady(Macierz1)
+        
 
-            GenerateGraph(Macierz2,n,g) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
-            EulerReady(Macierz2)
-
-            print("Generation done", n//x)
-
-            print(NewEulerMain(Macierz1)[0])
-            
-           
-            #a = CyklHamiltonaMain(Macierz2)
+if __name__ == "__main__":
+    for j in range(100):
+        r = multiprocessing.Process(target=run)
+        r.start()
+        time.sleep((60))
+        print("Times up")
+        r.terminate()
