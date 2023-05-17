@@ -141,6 +141,25 @@ def NewEulerMain(Macierz):
     NewEuler(0)
     return C
 
+
+def HamiltonReady(MacierzSąsiedztwa):
+    n=len(MacierzSąsiedztwa)
+    Kolej=list(range(n))
+    random.shuffle(Kolej)
+    
+    while len(Kolej)>1:
+        if MacierzSąsiedztwa[Kolej[0]][Kolej[1]]==0:
+            MacierzSąsiedztwa[Kolej[0]][Kolej[1]]=1
+            MacierzSąsiedztwa[Kolej[1]][Kolej[0]]=1
+            Kolej.remove(Kolej[0])
+    
+    if len(Kolej)==1:
+
+
+
+
+
+
 def run():
     g = 0.35
     Macierz1=[]
