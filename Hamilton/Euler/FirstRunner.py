@@ -161,10 +161,10 @@ def HamiltonReady(MacierzSąsiedztwa):
 
 
 def run():
-    g = 0.35
+    g = 0.50
     Macierz1=[]
 
-    x = 200
+    x = 50
     n=x
 
     GenerateGraph(Macierz1,n,g) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
@@ -175,8 +175,7 @@ def run():
 
     print(CyklHamiltonaMain(Macierz1))
 
-    for i in range(len(Macierz1)):
-        file.write(str(Macierz1[i])+"\n")
+
     
 
 file=open("graf.txt", "w")
@@ -187,6 +186,6 @@ if __name__ == "__main__":
     for j in range(100):
         r = multiprocessing.Process(target=run)
         r.start()
-        time.sleep((60))
+        time.sleep((60*2))
         print("Times up")
         r.terminate()
