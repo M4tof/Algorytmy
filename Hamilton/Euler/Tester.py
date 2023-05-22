@@ -271,7 +271,7 @@ def FindHamCycle(graph, pos, path, visited):
 
 
 
-for n in range(1,16):
+for n in range(2,16):
     Macierz=[]
     n=n*10
     GenerateGraph(Macierz,n,0.5) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
