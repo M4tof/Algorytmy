@@ -127,7 +127,6 @@ def NewEulerMain(Macierz):
             if Macierz[u][v]==1:
                 Macierz[u][v]=0
                 Macierz[v][u]=0
-                time.sleep(0.00002)
                 NewEuler(u)
         C.append(v)
     
@@ -142,7 +141,6 @@ def CyklHamiltonaMain(Macierz):
         V.append(v)
         for w in range(0,n):
             if (w not in V) and (Macierz[w][v]==1):
-                time.sleep(0.00002)
                 NewHamiltionianSub(w)
         if (len(V)==(n)):
             if(Macierz[v][I]==1):
@@ -225,6 +223,7 @@ def hamCycle(graph):
 # Recursive function to find all
 # hamiltonian cycles
 def FindHamCycle(graph, pos, path, visited):
+   
     # If all vertices are included
     # in Hamiltonian Cycle
     if pos == len(graph):
@@ -238,6 +237,9 @@ def FindHamCycle(graph, pos, path, visited):
             # into the path and
             # print the path
             path.append(0)
+            for i in range(len(path)):
+                print(path[i], end = " ")
+            print()
  
             # Remove the source
             # vertex added
@@ -271,21 +273,33 @@ def FindHamCycle(graph, pos, path, visited):
 
 
 
+<<<<<<< HEAD
 for n in range(2,16):
+=======
+file=open("wyniki.txt", "a")
+for n in range(1,16):
+>>>>>>> 4e2a3b929f0958da00d762a9c2c65e49d0659b8c
     Macierz=[]
-    n=n*10
-    GenerateGraph(Macierz,n,0.5) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
+    
+    n=n*1
+
+    GenerateGraph(Macierz,n,0.3) #0.35 == 35%  !!!!!!!!!!!! 1 nie działa !!!!!!!!!!!!!!!!!!!!!!!
     #PrintMacierzSąsiedztwa(Macierz)
     print("H")
-    EulerReady(Macierz)
     HamiltonReady(Macierz)
     print("H2")
 
-    startTime = time.time()        
+    startTime = time.time_ns()        
             
-    hamCycle(Macierz)
+    #hamCycle(Macierz)
+    CyklHamiltonaMain(Macierz)
 
-    endTime= time.time()    #time at end #NANO MACHINES SON !
+
+    endTime= time.time_ns()    #time at end #NANO MACHINES SON !
     totalTime= endTime - startTime  #run time
 
-    print(str(10),",",totalTime)
+    print(n,",",totalTime)  
+    file.write((str(n)+","+str(totalTime)+"\n"))
+    time.sleep(5)
+
+file.close()
