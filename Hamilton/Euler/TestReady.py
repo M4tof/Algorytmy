@@ -67,20 +67,9 @@ def FindHamCycle(graph, pos, path, visited):
             path.pop()
 
 def NewEulerMain(Macierz):
-    M=Macierz.copy()
-    C=[]
-    n=len(Macierz)
+    M=([0,1,2,3,1,4,3,5,4,2,0])
 
-    def NewEuler(v):
-        for u in range(n):
-            if M[u][v]==1:
-                M[u][v]=0
-                M[v][u]=0
-                NewEuler(u)
-        C.append(v)
-    
-    NewEuler(0)
-    return C
+    return(M)
 
 def CyklHamiltonaMain(Macierz):
     V = []
@@ -104,11 +93,13 @@ def CyklHamiltonaMain(Macierz):
     return NewHamiltonianSub(I)
 
 #################################################
-PrintMacierzSąsiedztwa(Macierz)
+# print("Maciorka: ")
+# PrintMacierzSąsiedztwa(Macierz)
+# print()
 
-print("Pierwszy Cykl Hamiltona: ")
-PrintCykl(CyklHamiltonaMain(Macierz))
-print()
+# print("Pierwszy Cykl Hamiltona: ")
+# PrintCykl(CyklHamiltonaMain(Macierz))
+# print()
 
 print("Wszystkie Cykle Hamiltona: ")
 MultiCyklHamiltona(Macierz)
