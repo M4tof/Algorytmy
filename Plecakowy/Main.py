@@ -38,7 +38,7 @@ def Zachłanny():
     for i in range(IloscPrzedmiotów):
         if Temp[i][2] + Włożone <= Rozmiar:
             Włożone += Temp[i][2]
-            Plecak.append(Temp[i][1])
+            Plecak.append(Temp[i])
 
 def Dynamiczny():
     global Plecak,Wagi,Koszt,Rozmiar,IloscPrzedmiotów
